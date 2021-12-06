@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLDC-RoutesToChaos", "NLDC-RoutesToChaos\NLDC-RoutesToChaos.csproj", "{3DFADB3E-2C6B-4D51-BB97-5C27FC0DE2D6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3DFADB3E-2C6B-4D51-BB97-5C27FC0DE2D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DFADB3E-2C6B-4D51-BB97-5C27FC0DE2D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DFADB3E-2C6B-4D51-BB97-5C27FC0DE2D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DFADB3E-2C6B-4D51-BB97-5C27FC0DE2D6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CB6DBF2C-54B2-4915-99F3-7B1FB2E853C9}
+	EndGlobalSection
+EndGlobal
