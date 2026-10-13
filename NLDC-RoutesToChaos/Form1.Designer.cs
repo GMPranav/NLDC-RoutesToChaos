@@ -1,4 +1,4 @@
-﻿
+
 namespace NLDC_RoutesToChaos
 {
     partial class Form1
@@ -121,7 +121,7 @@ namespace NLDC_RoutesToChaos
             series1.CustomProperties = "IsXAxisQuantitative=True, EmptyPointValue=Zero";
             series1.IsVisibleInLegend = false;
             series1.Legend = "Legend1";
-            series1.Name = "Population Value";
+            series1.Name = "State Value";
             series1.SmartLabelStyle.IsMarkerOverlappingAllowed = true;
             series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Int32;
             series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Single;
@@ -142,7 +142,7 @@ namespace NLDC_RoutesToChaos
             // 
             // numericUpDown3
             // 
-            this.numericUpDown3.DecimalPlaces = 2;
+            this.numericUpDown3.DecimalPlaces = 3;
             this.numericUpDown3.Increment = new decimal(new int[] {
             1,
             0,
@@ -150,7 +150,7 @@ namespace NLDC_RoutesToChaos
             131072});
             this.numericUpDown3.Location = new System.Drawing.Point(115, 183);
             this.numericUpDown3.Maximum = new decimal(new int[] {
-            5,
+            4,
             0,
             0,
             0});
@@ -158,7 +158,7 @@ namespace NLDC_RoutesToChaos
             this.numericUpDown3.Size = new System.Drawing.Size(99, 20);
             this.numericUpDown3.TabIndex = 5;
             this.numericUpDown3.Value = new decimal(new int[] {
-            5,
+            32,
             0,
             0,
             65536});
@@ -167,7 +167,7 @@ namespace NLDC_RoutesToChaos
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 69);
+            this.label1.Location = new System.Drawing.Point(12, 69);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(99, 13);
             this.label1.TabIndex = 6;
@@ -176,31 +176,32 @@ namespace NLDC_RoutesToChaos
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(25, 107);
+            this.label2.Location = new System.Drawing.Point(12, 107);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 13);
+            this.label2.Size = new System.Drawing.Size(89, 13);
             this.label2.TabIndex = 7;
-            this.label2.Text = "Initial Population";
+            this.label2.Text = "x(0) [Population]";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(79, 185);
+            this.label3.Location = new System.Drawing.Point(12, 185);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(30, 13);
+            this.label3.Size = new System.Drawing.Size(43, 13);
             this.label3.TabIndex = 8;
-            this.label3.Text = "Rate";
+            this.label3.Text = "Rate (r)";
             // 
             // comboBox1
             // 
+            this.comboBox1.DropDownWidth = 240;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "Logistic Map",
-            "Saddle Node Bifurcation",
-            "Hénon mapping"});
-            this.comboBox1.Location = new System.Drawing.Point(28, 24);
+            "Period Doubling (Logistic Map)",
+            "Intermittency (Quadratic Map)",
+            "Crises (Hénon Map)"});
+            this.comboBox1.Location = new System.Drawing.Point(15, 24);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(170, 21);
+            this.comboBox1.Size = new System.Drawing.Size(199, 21);
             this.comboBox1.TabIndex = 9;
             this.comboBox1.SelectedIndex = 0;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.combobox_changed);
@@ -209,7 +210,7 @@ namespace NLDC_RoutesToChaos
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label4.Location = new System.Drawing.Point(85, 146);
+            this.label4.Location = new System.Drawing.Point(12, 146);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(24, 13);
             this.label4.TabIndex = 11;

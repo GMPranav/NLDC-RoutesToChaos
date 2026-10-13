@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,80 +12,62 @@ namespace NLDC_RoutesToChaos
 {
     public partial class Form1 : Form
     {
+        private bool isUpdatingControls = false;
+
         public Form1()
         {
             InitializeComponent();
+            combobox_changed(this, EventArgs.Empty);
         }
 
         public void draw_logis_graph()
         {
-            foreach (var series in chart1.Series)
-                series.Points.Clear();
+            chart1.Series[0].Points.Clear();
             int n = Convert.ToInt32(numericUpDown1.Value);
-            float x = Convert.ToSingle(numericUpDown2.Value);
-            float r = Convert.ToSingle(numericUpDown3.Value);
+            double x = Convert.ToDouble(numericUpDown2.Value);
+            double r = Convert.ToDouble(numericUpDown3.Value);
             for (int i = 0; i <= n; i++)
             {
-                this.chart1.Series["Population Value"].Points.AddXY(i, x);
-                x = x * (1 - x) * r;
+                chart1.Series[0].Points.AddXY(i, x);
+                x = r * x * (1.0 - x);
+                if (double.IsNaN(x) || double.IsInfinity(x) || Math.Abs(x) > 10.0)
+                {
+                    break;
+                }
             }
         }
 
         public void draw_inter_graph()
         {
-            foreach (var series in chart1.Series)
-                series.Points.Clear();
+            chart1.Series[0].Points.Clear();
             int n = Convert.ToInt32(numericUpDown1.Value);
-            float x = Convert.ToSingle(numericUpDown2.Value);
-            float r = Convert.ToSingle(numericUpDown3.Value);
-            float max = x;
+            double x = Convert.ToDouble(numericUpDown2.Value);
+            double r = Convert.ToDouble(numericUpDown3.Value);
             for (int i = 0; i <= n; i++)
             {
-                x = 1 - (x * x * r);
-                if (x > max)
-                    max = x;
-            }
-            x = Convert.ToSingle(numericUpDown2.Value);
-            for (int i = 0; i <= n; i++)
-            {
-                float xn = x / max;
-                this.chart1.Series["Population Value"].Points.AddXY(i, xn);
-                x = 1 - (x * x * r);
-                if (x < 0)
+                chart1.Series[0].Points.AddXY(i, x);
+                x = 1.0 - (r * x * x);
+                if (double.IsNaN(x) || double.IsInfinity(x) || Math.Abs(x) > 10.0)
                 {
                     break;
                 }
             }
-
         }
 
         public void draw_crisis_graph()
         {
-            foreach (var series in chart1.Series)
-                series.Points.Clear();
+            chart1.Series[0].Points.Clear();
             int n = Convert.ToInt32(numericUpDown1.Value);
-            float x = Convert.ToSingle(numericUpDown2.Value);
-            float y = Convert.ToSingle(numericUpDown4.Value);
-            float r = Convert.ToSingle(numericUpDown3.Value);
-            float max = x;
+            double x = Convert.ToDouble(numericUpDown2.Value);
+            double y = Convert.ToDouble(numericUpDown4.Value);
+            double r = Convert.ToDouble(numericUpDown3.Value);
             for (int i = 0; i <= n; i++)
             {
-                float xt = x;
-                x = 1 - (x * x * r) + y;
-                y = (float)(xt * 0.3);
-                if (x > max)
-                    max = x;
-            }
-            x = Convert.ToSingle(numericUpDown2.Value);
-            y = Convert.ToSingle(numericUpDown4.Value);
-            for (int i = 0; i <= n; i++)
-            {
-                float xn = x / max;
-                float xt = x;
-                this.chart1.Series["Population Value"].Points.AddXY(i, xn);
-                x = 1 - (x * x * r) + y;
-                y = (float)(xt * 0.3);
-                if (x < 0)
+                chart1.Series[0].Points.AddXY(i, x);
+                double xt = x;
+                x = 1.0 - (r * x * x) + y;
+                y = 0.3 * xt;
+                if (double.IsNaN(x) || double.IsInfinity(x) || Math.Abs(x) > 10.0)
                 {
                     break;
                 }
@@ -94,31 +76,59 @@ namespace NLDC_RoutesToChaos
 
         public void draw_graph()
         {
-            if(comboBox1.SelectedIndex == 0)
+            if (comboBox1.SelectedIndex == 0)
             {
                 draw_logis_graph();
-                this.chart1.ChartAreas[0].Axes[1].Title = "Population";
+                chart1.ChartAreas[0].Axes[1].Title = "Population x";
             }
-            else if(comboBox1.SelectedIndex == 1)
+            else if (comboBox1.SelectedIndex == 1)
             {
                 draw_inter_graph();
-                this.chart1.ChartAreas[0].Axes[1].Title = "Population (normalized)";
+                chart1.ChartAreas[0].Axes[1].Title = "State Variable x";
             }
             else if (comboBox1.SelectedIndex == 2)
             {
                 draw_crisis_graph();
-                this.chart1.ChartAreas[0].Axes[1].Title = "Population (normalized)";
+                chart1.ChartAreas[0].Axes[1].Title = "State Variable x";
             }
         }
+
         public void readjust_graph(int n)
         {
-            chart1.ChartAreas[0].RecalculateAxesScale();
-            chart1.ChartAreas[0].AxisX.Crossing = 0;
-            chart1.ChartAreas[0].AxisY.Crossing = 0;
             chart1.ChartAreas[0].AxisX.Minimum = 0;
             chart1.ChartAreas[0].AxisX.Maximum = n;
-            chart1.ChartAreas[0].AxisY.Minimum = 0;
-            chart1.ChartAreas[0].AxisY.Maximum = 1.0;
+            chart1.ChartAreas[0].AxisX.Crossing = 0;
+
+            if (comboBox1.SelectedIndex == 0)
+            {
+                chart1.ChartAreas[0].AxisY.Crossing = 0;
+                chart1.ChartAreas[0].AxisY.Minimum = 0;
+                chart1.ChartAreas[0].AxisY.Maximum = 1.0;
+                chart1.ChartAreas[0].AxisY.Interval = 0.2;
+            }
+            else
+            {
+                chart1.ChartAreas[0].AxisY.Crossing = 0;
+                chart1.ChartAreas[0].AxisY.Minimum = -1.5;
+                chart1.ChartAreas[0].AxisY.Maximum = 1.5;
+                chart1.ChartAreas[0].AxisY.Interval = 0.5;
+            }
+            chart1.ChartAreas[0].RecalculateAxesScale();
+        }
+
+        private void SetNumericRange(NumericUpDown nud, decimal min, decimal max, decimal val, decimal inc, int decimals)
+        {
+            nud.DecimalPlaces = decimals;
+            nud.Increment = inc;
+            if (val < min) val = min;
+            if (val > max) val = max;
+
+            if (nud.Minimum > min) nud.Minimum = min;
+            if (nud.Maximum < max) nud.Maximum = max;
+
+            nud.Value = val;
+            nud.Minimum = min;
+            nud.Maximum = max;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -130,25 +140,21 @@ namespace NLDC_RoutesToChaos
 
         private void form_resize(object sender, EventArgs e)
         {
-            int w = this.Width - 255;
-            int h = this.Height - 70;
-            chart1.SetBounds(225, 15, w, h);
-            int n = Convert.ToInt32(numericUpDown1.Value);
-            readjust_graph(n);
-            label5.SetBounds(2, h - 5, 193, 13);
-            label6.SetBounds(2, h + 10, 225, 13);
+            int w = this.ClientSize.Width - 240;
+            int h = this.ClientSize.Height - 30;
+            if (w > 100 && h > 100)
+            {
+                chart1.SetBounds(225, 15, w, h);
+                int n = Convert.ToInt32(numericUpDown1.Value);
+                readjust_graph(n);
+            }
+            label5.Top = this.ClientSize.Height - 35;
+            label6.Top = this.ClientSize.Height - 20;
         }
 
         private void n_value_changed(object sender, EventArgs e)
         {
-            if(numericUpDown1.Value > 1000)
-            {
-                numericUpDown1.Value = 1000;
-            }
-            if (numericUpDown1.Value < 1)
-            {
-                numericUpDown1.Value = 1;
-            }
+            if (isUpdatingControls) return;
             int n = Convert.ToInt32(numericUpDown1.Value);
             draw_graph();
             readjust_graph(n);
@@ -156,14 +162,7 @@ namespace NLDC_RoutesToChaos
 
         private void x_value_changed(object sender, EventArgs e)
         {
-            if (numericUpDown2.Value > 1)
-            {
-                numericUpDown2.Value = 1;
-            }
-            if (numericUpDown2.Value < 0)
-            {
-                numericUpDown2.Value = 0;
-            }
+            if (isUpdatingControls) return;
             int n = Convert.ToInt32(numericUpDown1.Value);
             draw_graph();
             readjust_graph(n);
@@ -171,14 +170,15 @@ namespace NLDC_RoutesToChaos
 
         private void r_value_changed(object sender, EventArgs e)
         {
-            if (numericUpDown3.Value > 4)
-            {
-                numericUpDown3.Value = 4;
-            }
-            if (numericUpDown3.Value < 0)
-            {
-                numericUpDown3.Value = 0;
-            }
+            if (isUpdatingControls) return;
+            int n = Convert.ToInt32(numericUpDown1.Value);
+            draw_graph();
+            readjust_graph(n);
+        }
+
+        private void y_value_changed(object sender, EventArgs e)
+        {
+            if (isUpdatingControls) return;
             int n = Convert.ToInt32(numericUpDown1.Value);
             draw_graph();
             readjust_graph(n);
@@ -186,30 +186,51 @@ namespace NLDC_RoutesToChaos
 
         private void combobox_changed(object sender, EventArgs e)
         {
-            switch (comboBox1.SelectedIndex)
+            isUpdatingControls = true;
+            try
             {
-                case 0:
-                case 1:
-                    this.label4.ForeColor = SystemColors.ControlDark;
-                    this.numericUpDown4.Enabled = false;
-                    break;
-                case 2:
-                    this.label4.ForeColor = SystemColors.ControlText;
-                    this.numericUpDown4.Enabled = true;
-                    break;
-            }
-        }
+                switch (comboBox1.SelectedIndex)
+                {
+                    case 0:
+                        label2.Text = "x(0) [Population]";
+                        label3.Text = "Rate (r)";
+                        label4.Text = "y(0)";
+                        label4.ForeColor = SystemColors.ControlDark;
+                        numericUpDown4.Enabled = false;
 
-        private void y_value_changed(object sender, EventArgs e)
-        {
-            if (numericUpDown4.Value > 1)
-            {
-                numericUpDown4.Value = 1;
+                        SetNumericRange(numericUpDown2, 0m, 1m, 0.5m, 0.05m, 2);
+                        SetNumericRange(numericUpDown3, 0m, 4m, 3.2m, 0.01m, 3);
+                        break;
+
+                    case 1:
+                        label2.Text = "Initial x(0)";
+                        label3.Text = "Parameter (r)";
+                        label4.Text = "y(0)";
+                        label4.ForeColor = SystemColors.ControlDark;
+                        numericUpDown4.Enabled = false;
+
+                        SetNumericRange(numericUpDown2, -2m, 2m, 0.5m, 0.05m, 2);
+                        SetNumericRange(numericUpDown3, 0m, 2m, 1.748m, 0.005m, 3);
+                        break;
+
+                    case 2:
+                        label2.Text = "Initial x(0)";
+                        label3.Text = "Parameter (a)";
+                        label4.Text = "Initial y(0)";
+                        label4.ForeColor = SystemColors.ControlText;
+                        numericUpDown4.Enabled = true;
+
+                        SetNumericRange(numericUpDown2, -2m, 2m, 0.1m, 0.05m, 2);
+                        SetNumericRange(numericUpDown4, -2m, 2m, 0.1m, 0.05m, 2);
+                        SetNumericRange(numericUpDown3, 0m, 1.42m, 1.4m, 0.005m, 3);
+                        break;
+                }
             }
-            if (numericUpDown4.Value < 0)
+            finally
             {
-                numericUpDown4.Value = 0;
+                isUpdatingControls = false;
             }
+
             int n = Convert.ToInt32(numericUpDown1.Value);
             draw_graph();
             readjust_graph(n);
